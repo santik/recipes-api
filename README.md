@@ -26,6 +26,8 @@ Application is a simple maven application with Spring Boot as a parent. So runni
 Running all the tests and building the application:
 > mvn clean package
 
+or look at [Actions tab](https://github.com/santik/recipes-api/actions) of the repository for the latest builds
+
 ### Tests
 The codebase contains multiple Unit and Integration Tests.
 In combination, it provides the coverage almost 100%.
