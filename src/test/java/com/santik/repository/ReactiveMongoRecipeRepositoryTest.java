@@ -20,19 +20,19 @@ import reactor.test.StepVerifier;
 @ActiveProfiles("test")
 class ReactiveMongoRecipeRepositoryTest {
 
-  public static final String EXISTING_ID = UUID.randomUUID().toString();
+  private static final String EXISTING_ID = UUID.randomUUID().toString();
   @Autowired
   ReactiveMongoRecipeRepository reactiveMongoRecipeRepository;
 
   @BeforeEach
   void setUp() {
     var recipes = List.of(
-        new Recipe(null, "recipe1", false, 1, "instructions1",
-            List.of("ingredient11", "ingredient12")),
-        new Recipe(null, "recipe2", true, 2, "instructions2",
-            List.of("ingredient21", "ingredient22")),
-        new Recipe(EXISTING_ID, "recipe3", false, 3, "instructions3",
-            List.of("ingredient31", "ingredient32"))
+        new Recipe(EXISTING_ID, "pasta carbonara", false, 3, "take pasta, add carbonara",
+            List.of("pasta", "carbonara")),
+        new Recipe(null, "potatoes with meat", false, 4, "take potatoes, add meat, put in the oven",
+            List.of("potatoes", "meat")),
+        new Recipe(null, "potatoes with salmon", true, 2, "take potatoes, add fish, put in the oven",
+            List.of("potatoes", "salmon"))
     );
 
     reactiveMongoRecipeRepository.saveAll(recipes)
@@ -47,7 +47,7 @@ class ReactiveMongoRecipeRepositoryTest {
   @Test
   void findAll_shouldReturnAllRecipes() {
     //act
-    Flux<Recipe> all = reactiveMongoRecipeRepository.findAll();
+    var all = reactiveMongoRecipeRepository.findAll();
     //assert
     StepVerifier.create(all)
         .expectNextCount(3)
@@ -57,20 +57,20 @@ class ReactiveMongoRecipeRepositoryTest {
   @Test
   void findById() {
     //act
-    Mono<Recipe> recipeMono = reactiveMongoRecipeRepository.findById(EXISTING_ID);
+    var recipeMono = reactiveMongoRecipeRepository.findById(EXISTING_ID);
     //assert
     StepVerifier.create(recipeMono)
-        .assertNext(recipe -> assertEquals("recipe3", recipe.getName()))
+        .assertNext(recipe -> assertEquals("pasta carbonara", recipe.getName()))
         .verifyComplete();
   }
 
   @Test
   void saveRecipe() {
     //arrange
-    Recipe recipe = new Recipe(null, "recipe1", false, 1, "instructions1",
-        List.of("ingredient11", "ingredient12"));
+    var recipe = new Recipe(null, "recipe", false, 1, "instructions",
+        List.of("ingredient"));
     //act
-    Mono<Recipe> save = reactiveMongoRecipeRepository.save(recipe);
+    var save = reactiveMongoRecipeRepository.save(recipe);
     //assert
     StepVerifier.create(save)
         .assertNext(savedRecipe -> {
@@ -83,10 +83,10 @@ class ReactiveMongoRecipeRepositoryTest {
   @Test
   void update() {
     //arrange
-    Recipe recipe = reactiveMongoRecipeRepository.findById(EXISTING_ID).block();
+    var recipe = reactiveMongoRecipeRepository.findById(EXISTING_ID).block();
     recipe.setNumberOfServings(2022);
     //act
-    Mono<Recipe> save = reactiveMongoRecipeRepository.save(recipe);
+    var save = reactiveMongoRecipeRepository.save(recipe);
     //assert
     StepVerifier.create(save)
         .assertNext(savedRecipe -> {
@@ -101,7 +101,7 @@ class ReactiveMongoRecipeRepositoryTest {
     //arrange
     reactiveMongoRecipeRepository.deleteById(EXISTING_ID).block();
     //act
-    Flux<Recipe> all = reactiveMongoRecipeRepository.findAll();
+    var all = reactiveMongoRecipeRepository.findAll();
     //assert
     StepVerifier.create(all)
         .expectNextCount(2)

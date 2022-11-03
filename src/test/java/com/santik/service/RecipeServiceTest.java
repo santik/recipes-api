@@ -63,7 +63,7 @@ class RecipeServiceTest {
     when(recipeRepository.findAll()).thenReturn(Flux.just(domainRecipe));
 
     //act
-    Flux<com.santik.api.model.Recipe> allRecipes = recipeService.getAllRecipes();
+    var allRecipes = recipeService.getAllRecipes();
 
     //assert
     assertSame(allRecipes.blockFirst(), recipe);
@@ -76,7 +76,7 @@ class RecipeServiceTest {
     String id = "someid";
 
     //act
-    Mono<com.santik.api.model.Recipe> recipe = recipeService.getRecipeById(id);
+    var recipe = recipeService.getRecipeById(id);
 
     //assert
     assertSame(recipe.block(), this.recipe);
@@ -90,7 +90,7 @@ class RecipeServiceTest {
     when(recipeRepository.findById(id)).thenReturn(Mono.just(domainRecipe));
 
     //act
-    Mono<com.santik.api.model.Recipe> recipeMono = recipeService.updateRecipeById(id,
+    var recipeMono = recipeService.updateRecipeById(id,
         Mono.just(recipe));
 
     //assert
@@ -100,7 +100,7 @@ class RecipeServiceTest {
   @Test
   void deleteRecipeById() {
     //arrange
-    String id = "someid";
+    var id = "someid";
     when(recipeRepository.deleteById(id)).thenReturn(Mono.empty());
     reset(recipesMapper);
 
@@ -111,7 +111,7 @@ class RecipeServiceTest {
   @Test
   void search() {
     //arrange
-    RecipesSearch search = new RecipesSearch();
+    var search = new RecipesSearch();
     when(recipeRepository.search(search)).thenReturn(Flux.just(domainRecipe));
 
     //act && assert

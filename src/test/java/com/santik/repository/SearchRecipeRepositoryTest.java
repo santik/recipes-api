@@ -18,7 +18,7 @@ import reactor.test.StepVerifier;
 @ActiveProfiles("test")
 class SearchRecipeRepositoryTest {
 
-  public static final String EXISTING_ID = UUID.randomUUID().toString();
+  private static final String EXISTING_ID = UUID.randomUUID().toString();
 
   @Autowired
   ReactiveMongoRecipeRepository reactiveMongoRecipeRepository;
@@ -28,14 +28,12 @@ class SearchRecipeRepositoryTest {
   @BeforeEach
   void setUp() {
     var recipes = List.of(
-        new Recipe(null, "recipe1", false, 1, "hard instructions1",
-            List.of("salt", "ingredient12")),
-        new Recipe(null, "recipe2", true, 2, "instructions2 easy",
-            List.of("salt", "sugar")),
-        new Recipe(null, "recipe2", false, 2, "instructions2 easy",
-            List.of("salt", "ingredient22")),
-        new Recipe(EXISTING_ID, "recipe3", false, 3, "instructions3 difficult",
-            List.of("ingredient31", "ingredient32"))
+        new Recipe(EXISTING_ID, "pasta carbonara", false, 2, "take pasta, add carbonara",
+            List.of("pasta", "carbonara")),
+        new Recipe(null, "potatoes with meat", false, 4, "take potatoes, add meat, put in the oven",
+            List.of("potatoes", "meat")),
+        new Recipe(null, "potatoes with salmon", true, 2, "take potatoes, add fish, put in the oven",
+            List.of("potatoes", "salmon"))
     );
 
     reactiveMongoRecipeRepository.saveAll(recipes)
@@ -51,11 +49,11 @@ class SearchRecipeRepositoryTest {
   @Test
   void search_withFullTextSearch() {
     //arrange
-    RecipesSearch search = new RecipesSearch();
-    search.setInstructionsSearch("easy");
+    var search = new RecipesSearch();
+    search.setInstructionsSearch("potatoes");
 
     //act
-    Flux<Recipe> recipeFlux = recipeRepository.search(search).log();
+    var recipeFlux = recipeRepository.search(search).log();
 
     //assert
     StepVerifier.create(recipeFlux)
@@ -71,24 +69,24 @@ class SearchRecipeRepositoryTest {
   @Test
   void search_withIncludeExcludeIngredients() {
     //arrange
-    RecipesSearch search = new RecipesSearch();
-    search.setIncludeIngredients(List.of("salt"));
+    var search = new RecipesSearch();
+    search.setIncludeIngredients(List.of("potatoes"));
 
     //act && assert
     StepVerifier.create(recipeRepository.search(search))
-        .expectNextCount(3)
+        .expectNextCount(2)
         .verifyComplete();
 
-    search.setExcludeIngredients(List.of("sugar"));
+    search.setExcludeIngredients(List.of("meat"));
     StepVerifier.create(recipeRepository.search(search))
-        .expectNextCount(2)
+        .expectNextCount(1)
         .verifyComplete();
   }
 
   @Test
   void search_withNumberOfServingsVegetarian() {
     //arrange
-    RecipesSearch search = new RecipesSearch();
+    var search = new RecipesSearch();
     search.setNumberOfServings(2);
 
     //act && assert

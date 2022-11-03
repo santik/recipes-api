@@ -36,12 +36,12 @@ class RecipeE2ETest {
   void setUp() {
 
     var recipes = List.of(
-        new Recipe(null, "recipe1", false, 1, "hard instructions1",
-            List.of("ingredient11", "ingredient12")),
-        new Recipe(null, "recipe2", true, 2, "easy instructions2",
-            List.of("ingredient21", "ingredient22")),
-        new Recipe(EXISTING_ID, "recipe3", false, 3, "medium instructions3",
-            List.of("ingredient31", "ingredient32"))
+        new Recipe(EXISTING_ID, "pasta carbonara", false, 3, "take pasta, add carbonara",
+            List.of("pasta", "carbonara")),
+        new Recipe(null, "potatoes with meat", false, 4, "take potatoes, add meat, put in the oven",
+            List.of("potatoes", "meat")),
+        new Recipe(null, "potatoes with salmon", true, 2, "take potatoes, add fish, put in the oven",
+            List.of("potatoes", "salmon"))
     );
 
     recipeRepository.saveAll(recipes)
@@ -56,7 +56,7 @@ class RecipeE2ETest {
   @Test
   void addRecipe() {
 
-    Recipe recipe = new Recipe(null, "recipe1", false, 1, "instructions1",
+    var recipe = new Recipe(null, "recipe1", false, 1, "instructions1",
         List.of("ingredient11", "ingredient12"));
 
     webTestClient
@@ -68,7 +68,7 @@ class RecipeE2ETest {
         .isCreated()
         .expectBody(Recipe.class)
         .consumeWith(recipeEntityExchangeResult -> {
-          Recipe responseBody = recipeEntityExchangeResult.getResponseBody();
+          var responseBody = recipeEntityExchangeResult.getResponseBody();
           assert responseBody != null;
           assertNotNull(responseBody.getId());
         });
@@ -77,8 +77,8 @@ class RecipeE2ETest {
   @Test
   void addRecipe_badRequest() {
 
-    Recipe recipe = new Recipe(null, "", false, 1, "instructions1",
-        List.of("ingredient11", "ingredient12"));
+    var recipe = new Recipe(null, "", false, 1, "instructions",
+        List.of("ingredient"));
 
     webTestClient
         .post()
@@ -110,7 +110,7 @@ class RecipeE2ETest {
         .expectStatus()
         .is2xxSuccessful()
         .expectBody()
-        .jsonPath("$.name").isEqualTo("recipe3");
+        .jsonPath("$.name").isEqualTo("pasta carbonara");
   }
 
   @Test
@@ -127,8 +127,8 @@ class RecipeE2ETest {
   @Test
   void updateRecipe() {
 
-    Recipe recipe = new Recipe(null, "recipe1", false, 1, "instructions1",
-        List.of("ingredient11", "ingredient12"));
+    var recipe = new Recipe(null, "recipe", false, 1, "instructions",
+        List.of("ingredient"));
 
     webTestClient
         .put()
@@ -139,7 +139,7 @@ class RecipeE2ETest {
         .is2xxSuccessful()
         .expectBody(Recipe.class)
         .consumeWith(recipeEntityExchangeResult -> {
-          Recipe responseBody = recipeEntityExchangeResult.getResponseBody();
+          var responseBody = recipeEntityExchangeResult.getResponseBody();
           assert responseBody != null;
           assertNotNull(responseBody.getId());
           assertEquals(recipe.getName(), responseBody.getName());
@@ -149,8 +149,8 @@ class RecipeE2ETest {
   @Test
   void updateRecipe_badRequest() {
 
-    Recipe recipe = new Recipe(null, "recipe1", false, -1, "instructions1",
-        List.of("ingredient11", "ingredient12"));
+    var recipe = new Recipe(null, "recipe", false, -1, "instructions",
+        List.of("ingredient"));
 
     webTestClient
         .put()
@@ -164,8 +164,8 @@ class RecipeE2ETest {
   @Test
   void updateRecipe_notFound() {
 
-    Recipe recipe = new Recipe(null, "recipe1", false, 1, "instructions1",
-        List.of("ingredient11", "ingredient12"));
+    var recipe = new Recipe(null, "recipe", false, 1, "instructions",
+        List.of("ingredient"));
 
     webTestClient
         .put()
@@ -198,8 +198,8 @@ class RecipeE2ETest {
   @Test
   void searchRecipes() {
 
-    RecipesSearch recipeSearch = new RecipesSearch();
-    recipeSearch.setInstructionsSearch("hard");
+    var recipeSearch = new RecipesSearch();
+    recipeSearch.setInstructionsSearch("pasta");
     webTestClient
         .post()
         .uri(RECIPE_URI + "/searches")
@@ -220,13 +220,62 @@ class RecipeE2ETest {
         .is2xxSuccessful()
         .expectBodyList(Recipe.class)
         .hasSize(0);
+  }
 
+  @Test
+  void searchRecipes_allVegetarian() {
+
+    var recipeSearch = new RecipesSearch();
+    recipeSearch.setIsVegetarian(true);
+    webTestClient
+        .post()
+        .uri(RECIPE_URI + "/searches")
+        .bodyValue(recipeSearch)
+        .exchange()
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBodyList(Recipe.class)
+        .hasSize(1);
+  }
+
+  @Test
+  void searchRecipes_4PersonPotatoes() {
+
+    var recipeSearch = new RecipesSearch();
+    recipeSearch.setNumberOfServings(4);
+    recipeSearch.setInstructionsSearch("potatoes");
+    webTestClient
+        .post()
+        .uri(RECIPE_URI + "/searches")
+        .bodyValue(recipeSearch)
+        .exchange()
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBodyList(Recipe.class)
+        .hasSize(1);
+  }
+
+  @Test
+  void searchRecipes_NoSalmonOven() {
+
+    var recipeSearch = new RecipesSearch();
+    recipeSearch.setExcludeIngredients(List.of("salmon"));
+    recipeSearch.setInstructionsSearch("oven");
+    webTestClient
+        .post()
+        .uri(RECIPE_URI + "/searches")
+        .bodyValue(recipeSearch)
+        .exchange()
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBodyList(Recipe.class)
+        .hasSize(1);
   }
 
   @Test
   void searchRecipes_badRequest() {
 
-    RecipesSearch recipeSearch = new RecipesSearch();
+    var recipeSearch = new RecipesSearch();
     recipeSearch.setInstructionsSearch("");
 
     webTestClient

@@ -16,9 +16,9 @@ class RecipeSearchQueryBuilderTest {
   @Test
   void getRecipeSearchQuery() {
     //arrange
-    RecipeSearchQueryBuilder builder = new RecipeSearchQueryBuilder();
+    var builder = new RecipeSearchQueryBuilder();
 
-    RecipesSearch search = new RecipesSearch();
+    var search = new RecipesSearch();
     search.setIsVegetarian(true);
     search.setNumberOfServings(123);
     search.setInstructionsSearch("somesearch");
@@ -26,7 +26,7 @@ class RecipeSearchQueryBuilderTest {
     search.setIncludeIngredients(List.of("IncludeIngredients"));
 
     //act
-    Query recipeSearchQuery = builder.getRecipeSearchQuery(search);
+    var recipeSearchQuery = builder.getRecipeSearchQuery(search);
 
     //assert
     Map<String, CriteriaDefinition> criteria = (Map<String, CriteriaDefinition>) ReflectionTestUtils.getField(
