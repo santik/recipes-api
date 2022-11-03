@@ -12,20 +12,20 @@ For implementation WebFlux library is used. It allows to serve requests and resp
 
 ## Datastore
 To store the data MongoDB is used.
-For testing application strats up the embedded MongoDB server.
+The application starts up the embedded MongoDB server for testing.
 
 ### Database operations
-Apllication supports the standard CRUD operations for recipes and also search operation including full text search by recipe instructions.
-In code it is achieved by creating 2 separate repositories:
+Application supports the standard CRUD operations for recipes and also search operation including full text search by recipe instructions.
+In code it is achieved by creating 2 separate (sub)repositories:
 
 - CRUD repository
 - Search repository in combination with query builder
 
 ## Application
-Applicaton is a simple maven application with Spring Boot as parent. So running and testing is very simple:
+Application is a simple maven application with Spring Boot as a parent. So running and testing is very simple:
 Running all the tests and building the application:
 > mvn clean package
 
 ### Tests
 The codebase contains multiple Unit and Integration Tests.
-In combination it provides the coverage almost 100%.
+In combination, it provides the coverage almost 100%.
