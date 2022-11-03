@@ -1,0 +1,356 @@
+{
+   "openapi": "3.0.0",
+   "info": {
+      "version": "1.0.0",
+      "title": "Swagger Recipestore",
+      "description": "A sample API that uses a recipestore as an example to demonstrate features in the OpenAPI 3.0 specification",
+      "termsOfService": "http://swagger.io/terms/",
+      "contact": {
+         "name": "Swagger API Team",
+         "email": "apiteam@swagger.io",
+         "url": "http://swagger.io"
+      }
+   },
+   "paths": {
+      "/recipes": {
+         "get": {
+            "tags": [
+               "RECIPE"
+            ],
+            "summary": "Returns all recipes",
+            "description": "Returns all recipes",
+            "operationId": "findRecipes",
+            "responses": {
+               "200": {
+                  "description": "recipe response",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "array",
+                           "items": {
+                              "$ref": "#/components/schemas/Recipe"
+                           }
+                        }
+                     }
+                  }
+               },
+               "default": {
+                  "description": "unexpected error",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+               }
+            }
+         },
+         "post": {
+            "tags": [
+               "RECIPE"
+            ],
+            "summary": "Creates a new recipe. Duplicates are not allowed",
+            "description": "Creates a new recipe. Duplicates are not allowed",
+            "operationId": "addRecipe",
+            "requestBody": {
+               "description": "Recipe to add",
+               "required": true,
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "$ref": "#/components/schemas/NewRecipe"
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "201": {
+                  "description": "recipe response",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Recipe"
+                        }
+                     }
+                  }
+               },
+               "default": {
+                  "description": "unexpected error",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/recipes/{id}": {
+         "get": {
+            "tags": [
+               "RECIPE"
+            ],
+            "summary": "Returns a recipe based on a single ID",
+            "description": "Returns a recipe based on a single ID",
+            "operationId": "find recipe by id",
+            "parameters": [
+               {
+                  "name": "id",
+                  "in": "path",
+                  "description": "ID of recipe to fetch",
+                  "required": true,
+                  "schema": {
+                     "type": "string"
+                  }
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "recipe response",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Recipe"
+                        }
+                     }
+                  }
+               },
+               "default": {
+                  "description": "unexpected error",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+               }
+            }
+         },
+         "delete": {
+            "tags": [
+               "RECIPE"
+            ],
+            "summary": "deletes a single recipe based on the ID supplied",
+            "description": "deletes a single recipe based on the ID supplied",
+            "operationId": "deleteRecipe",
+            "parameters": [
+               {
+                  "name": "id",
+                  "in": "path",
+                  "description": "ID of recipe to delete",
+                  "required": true,
+                  "schema": {
+                     "type": "string"
+                  }
+               }
+            ],
+            "responses": {
+               "204": {
+                  "description": "recipe deleted"
+               },
+               "default": {
+                  "description": "unexpected error",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+               }
+            }
+         },
+         "put": {
+            "tags": [
+               "RECIPE"
+            ],
+            "parameters": [
+               {
+                  "name": "id",
+                  "in": "path",
+                  "description": "ID of recipe to update",
+                  "required": true,
+                  "schema": {
+                     "type": "string"
+                  }
+               }
+            ],
+            "summary": "Updates a recipe.",
+            "description": "Updates recipe.",
+            "operationId": "updateRecipe",
+            "requestBody": {
+               "description": "Recipe to update",
+               "required": true,
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "$ref": "#/components/schemas/Recipe"
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "recipe response",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Recipe"
+                        }
+                     }
+                  }
+               },
+               "default": {
+                  "description": "unexpected error",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/recipes/searches": {
+         "post": {
+            "tags": [
+               "RECIPE"
+            ],
+            "summary": "Searches recipes.",
+            "description": "Searches recipes.",
+            "operationId": "searchRecipes",
+            "requestBody": {
+               "description": "Search parameters",
+               "required": true,
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "$ref": "#/components/schemas/RecipesSearch"
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "recipe response",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "array",
+                           "items": {
+                              "$ref": "#/components/schemas/Recipe"
+                           }
+                        }
+                     }
+                  }
+               },
+               "default": {
+                  "description": "unexpected error",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   },
+   "components": {
+      "schemas": {
+         "Recipe": {
+            "allOf": [
+               {
+                  "$ref": "#/components/schemas/NewRecipe"
+               },
+               {
+                  "type": "object",
+                  "properties": {
+                     "id": {
+                        "type": "string"
+                     }
+                  }
+               }
+            ]
+         },
+         "NewRecipe": {
+            "type": "object",
+            "required": [
+               "name"
+            ],
+            "properties": {
+               "name": {
+                  "type": "string",
+                  "minLength": 1
+               },
+               "isVegetarian": {
+                  "type": "boolean"
+               },
+               "numberOfServings": {
+                  "type": "integer",
+                  "minimum": 1
+               },
+               "instructions": {
+                  "type": "string",
+                  "minLength": 1
+               },
+               "ingredients": {
+                  "type": "array",
+                  "items": {
+                     "type": "string"
+                  }
+               }
+            }
+         },
+         "RecipesSearch": {
+            "type": "object",
+            "properties": {
+               "instructionsSearch": {
+                  "type": "string",
+                  "minLength": 1
+               },
+               "isVegetarian": {
+                  "type": "boolean"
+               },
+               "numberOfServings": {
+                  "type": "integer",
+                  "minimum": 1
+               },
+               "includeIngredients": {
+                  "type": "array",
+                  "items": {
+                     "type": "string",
+                     "minLength": 1
+                  }
+               },
+               "excludeIngredients": {
+                  "type": "array",
+                  "items": {
+                     "type": "string",
+                     "minLength": 1
+                  }
+               }
+            }
+         },
+         "Error": {
+            "type": "object",
+            "required": [
+               "message"
+            ],
+            "properties": {
+               "message": {
+                  "type": "string"
+               }
+            }
+         }
+      }
+   }
+}
