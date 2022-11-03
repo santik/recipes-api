@@ -34,8 +34,8 @@
             "tags": [
                "RECIPE"
             ],
-            "summary": "Creates a new recipe. Duplicates are not allowed",
-            "description": "Creates a new recipe. Duplicates are not allowed",
+            "summary": "Creates a new recipe.",
+            "description": "Creates a new recipe.",
             "operationId": "addRecipe",
             "requestBody": {
                "description": "Recipe to add",
