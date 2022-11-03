@@ -2,14 +2,8 @@
    "openapi": "3.0.0",
    "info": {
       "version": "1.0.0",
-      "title": "Swagger Recipestore",
-      "description": "A sample API that uses a recipestore as an example to demonstrate features in the OpenAPI 3.0 specification",
-      "termsOfService": "http://swagger.io/terms/",
-      "contact": {
-         "name": "Swagger API Team",
-         "email": "apiteam@swagger.io",
-         "url": "http://swagger.io"
-      }
+      "title": "Recipe API",
+      "description": "Recipe API"
    },
    "paths": {
       "/recipes": {
@@ -30,16 +24,6 @@
                            "items": {
                               "$ref": "#/components/schemas/Recipe"
                            }
-                        }
-                     }
-                  }
-               },
-               "default": {
-                  "description": "unexpected error",
-                  "content": {
-                     "application/json": {
-                        "schema": {
-                           "$ref": "#/components/schemas/Error"
                         }
                      }
                   }
@@ -74,16 +58,6 @@
                         }
                      }
                   }
-               },
-               "default": {
-                  "description": "unexpected error",
-                  "content": {
-                     "application/json": {
-                        "schema": {
-                           "$ref": "#/components/schemas/Error"
-                        }
-                     }
-                  }
                }
             }
          }
@@ -104,7 +78,8 @@
                   "required": true,
                   "schema": {
                      "type": "string"
-                  }
+                  },
+                  "example": "someid"
                }
             ],
             "responses": {
@@ -114,16 +89,6 @@
                      "application/json": {
                         "schema": {
                            "$ref": "#/components/schemas/Recipe"
-                        }
-                     }
-                  }
-               },
-               "default": {
-                  "description": "unexpected error",
-                  "content": {
-                     "application/json": {
-                        "schema": {
-                           "$ref": "#/components/schemas/Error"
                         }
                      }
                   }
@@ -145,22 +110,13 @@
                   "required": true,
                   "schema": {
                      "type": "string"
-                  }
+                  },
+                  "example": "someid"
                }
             ],
             "responses": {
                "204": {
                   "description": "recipe deleted"
-               },
-               "default": {
-                  "description": "unexpected error",
-                  "content": {
-                     "application/json": {
-                        "schema": {
-                           "$ref": "#/components/schemas/Error"
-                        }
-                     }
-                  }
                }
             }
          },
@@ -176,7 +132,8 @@
                   "required": true,
                   "schema": {
                      "type": "string"
-                  }
+                  },
+                  "example": "someid"
                }
             ],
             "summary": "Updates a recipe.",
@@ -200,16 +157,6 @@
                      "application/json": {
                         "schema": {
                            "$ref": "#/components/schemas/Recipe"
-                        }
-                     }
-                  }
-               },
-               "default": {
-                  "description": "unexpected error",
-                  "content": {
-                     "application/json": {
-                        "schema": {
-                           "$ref": "#/components/schemas/Error"
                         }
                      }
                   }
@@ -249,16 +196,6 @@
                         }
                      }
                   }
-               },
-               "default": {
-                  "description": "unexpected error",
-                  "content": {
-                     "application/json": {
-                        "schema": {
-                           "$ref": "#/components/schemas/Error"
-                        }
-                     }
-                  }
                }
             }
          }
@@ -275,7 +212,8 @@
                   "type": "object",
                   "properties": {
                      "id": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "someid"
                      }
                   }
                }
@@ -289,23 +227,28 @@
             "properties": {
                "name": {
                   "type": "string",
-                  "minLength": 1
+                  "minLength": 1,
+                  "example": "pasta carbonara"
                },
                "isVegetarian": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "example": false
                },
                "numberOfServings": {
                   "type": "integer",
-                  "minimum": 1
+                  "minimum": 1,
+                  "example": 3
                },
                "instructions": {
                   "type": "string",
-                  "minLength": 1
+                  "minLength": 1,
+                  "example": "take pasta, add carbonara"
                },
                "ingredients": {
                   "type": "array",
                   "items": {
-                     "type": "string"
+                     "type": "string",
+                     "example": "pasta"
                   }
                }
             }
@@ -315,39 +258,33 @@
             "properties": {
                "instructionsSearch": {
                   "type": "string",
-                  "minLength": 1
+                  "minLength": 1,
+                  "example": "pasta"
                },
                "isVegetarian": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "example": false
                },
                "numberOfServings": {
                   "type": "integer",
-                  "minimum": 1
+                  "minimum": 1,
+                  "example": 3
                },
                "includeIngredients": {
                   "type": "array",
                   "items": {
                      "type": "string",
-                     "minLength": 1
+                     "minLength": 1,
+                     "example": "pasta"
                   }
                },
                "excludeIngredients": {
                   "type": "array",
                   "items": {
                      "type": "string",
-                     "minLength": 1
+                     "minLength": 1,
+                     "example": "onion"
                   }
-               }
-            }
-         },
-         "Error": {
-            "type": "object",
-            "required": [
-               "message"
-            ],
-            "properties": {
-               "message": {
-                  "type": "string"
                }
             }
          }

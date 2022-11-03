@@ -6,9 +6,9 @@ A simple application that allows to save, view, update, delete and search recipe
 ### Specifications
 Repository contains API specifications in OpenAPI format.
 The overview can be viewed by the url:
->>>>>>>
+[Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/santik/recipes-api/master/openapi/RecipesAPI.json)
 ### Implementation
-For implementation WebFlux library is used. It allows to serve requests and responses asyncroniosly and has a lot of tools to provide stabily of the application.
+For implementation WebFlux library is used. It allows to serve requests and responses asynchronously and has a lot of tools to provide stabily of the application.
 
 ## Datastore
 To store the data MongoDB is used.
