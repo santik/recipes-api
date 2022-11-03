@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 class RecipeSearchQueryBuilder {
 
   public Query getRecipeSearchQuery(RecipesSearch search) {
-    Query query = new Query();
+    var query = new Query();
 
     if (Objects.nonNull(search.getIsVegetarian())) {
       query.addCriteria(Criteria.where("isVegetarian").is(search.getIsVegetarian()));
@@ -35,5 +35,4 @@ class RecipeSearchQueryBuilder {
     }
     return query;
   }
-
 }
