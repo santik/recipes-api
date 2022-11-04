@@ -23,6 +23,7 @@
     <jackson-databind-nullable.version>0.1.0</jackson-databind-nullable.version>
     <validation-api.version>2.0.1.Final</validation-api.version>
     <openapi-generator-maven-plugin.version>6.2.0</openapi-generator-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
   </properties>
 
   <dependencies>
@@ -146,7 +147,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.8</version>
+        <version>${jacoco-maven-plugin.version}</version>
         <executions>
           <execution>
             <goals>
