@@ -1,7 +1,9 @@
 package com.santik.service;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
@@ -9,7 +11,9 @@ import com.santik.api.model.NewRecipe;
 import com.santik.api.model.RecipesSearch;
 import com.santik.domain.Recipe;
 import com.santik.mapper.RecipesMapper;
-import com.santik.repository.RecipeRepository;
+import com.santik.repository.ReactiveMongoRecipeRepository;
+import com.santik.repository.ReactiveMongoSearchRecipeRepository;
+import com.santik.repository.RecipeSearchQueryBuilder;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.mongodb.core.query.Query;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -24,10 +29,16 @@ import reactor.core.publisher.Mono;
 class RecipeServiceTest {
 
   @Mock
-  RecipeRepository recipeRepository;
+  ReactiveMongoRecipeRepository recipeRepository;
+
+  @Mock
+  ReactiveMongoSearchRecipeRepository searchRecipeRepository;
 
   @Mock
   RecipesMapper recipesMapper;
+
+  @Mock
+  RecipeSearchQueryBuilder queryBuilder;
 
   @InjectMocks
   RecipeService recipeService;
@@ -112,7 +123,8 @@ class RecipeServiceTest {
   void search() {
     //arrange
     var search = new RecipesSearch();
-    when(recipeRepository.search(search)).thenReturn(Flux.just(domainRecipe));
+    when(queryBuilder.getRecipeSearchQuery(search)).thenReturn(mock(Query.class));
+    when(searchRecipeRepository.findAll(any())).thenReturn(Flux.just(domainRecipe));
 
     //act && assert
     assertSame(recipe, recipeService.searchRecipes(Mono.just(search)).blockFirst());

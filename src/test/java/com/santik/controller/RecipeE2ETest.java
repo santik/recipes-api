@@ -3,13 +3,10 @@ package com.santik.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.santik.TestDataManager;
 import com.santik.api.model.RecipesSearch;
 import com.santik.domain.Recipe;
-import com.santik.repository.RecipeRepository;
 import java.util.List;
-import java.util.UUID;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -21,37 +18,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
-class RecipeE2ETest {
+class RecipeE2ETest extends TestDataManager {
 
   private static final String RECIPE_URI = "/recipes";
   private static final String SEARCHES_PATH = "/searches";
-  private static final String EXISTING_ID = UUID.randomUUID().toString();
-  @Autowired
-  RecipeRepository recipeRepository;
 
   @Autowired
   WebTestClient webTestClient;
-
-  @BeforeEach
-  void setUp() {
-
-    var recipes = List.of(
-        new Recipe(EXISTING_ID, "pasta carbonara", false, 3, "take pasta, add carbonara",
-            List.of("pasta", "carbonara")),
-        new Recipe(null, "potatoes with meat", false, 4, "take potatoes, add meat, put in the oven",
-            List.of("potatoes", "meat")),
-        new Recipe(null, "potatoes with salmon", true, 2, "take potatoes, add fish, put in the oven",
-            List.of("potatoes", "salmon"))
-    );
-
-    recipeRepository.saveAll(recipes)
-        .blockLast();
-  }
-
-  @AfterEach
-  void tearDown() {
-    recipeRepository.deleteAll().block();
-  }
 
   @Test
   void addRecipe() {

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Component;
 
 @Component
-class RecipeSearchQueryBuilder {
+public class RecipeSearchQueryBuilder {
 
   public Query getRecipeSearchQuery(RecipesSearch search) {
     var query = new Query();

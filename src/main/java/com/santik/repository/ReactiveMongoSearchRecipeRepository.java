@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux;
 
 @RequiredArgsConstructor
 @Component
-class ReactiveMongoSearchRecipeRepository {
+public class ReactiveMongoSearchRecipeRepository {
 
   private final ReactiveMongoTemplate mongoTemplate;
 
