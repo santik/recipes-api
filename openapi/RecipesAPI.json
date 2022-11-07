@@ -58,6 +58,9 @@
                         }
                      }
                   }
+               },
+               "400": {
+                  "description": "Bad request"
                }
             }
          }
@@ -92,6 +95,9 @@
                         }
                      }
                   }
+               },
+               "404": {
+                  "description": "Not found"
                }
             }
          },
@@ -117,6 +123,9 @@
             "responses": {
                "204": {
                   "description": "recipe deleted"
+               },
+               "404": {
+                  "description": "Not found"
                }
             }
          },
@@ -160,6 +169,12 @@
                         }
                      }
                   }
+               },
+               "404": {
+                  "description": "Not found"
+               },
+               "400": {
+                  "description": "Bad request"
                }
             }
          }
@@ -196,6 +211,9 @@
                         }
                      }
                   }
+               },
+               "400": {
+                  "description": "Bad request"
                }
             }
          }
